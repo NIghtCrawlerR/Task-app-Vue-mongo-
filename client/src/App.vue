@@ -1,16 +1,20 @@
 <template>
   <div id="app">
-    <TaskApp/>
+    <!-- <TaskApp/> -->
+    <Header></Header>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import TaskApp from './components/TaskApp.vue'
+// import TaskApp from './components/TaskApp.vue'
+import Header from './components/Header'
 
 export default {
   name: 'app',
   components: {
-    TaskApp
+   // TaskApp,
+    Header
   },
   data(){
       return {
@@ -29,6 +33,10 @@ export default {
     --badge-pink: #ff2ea1;
     --badge-purple: #9b0e5c;
     --badge-default: #b6b6b6;
+}
+
+body {
+    background-color: #141b29 !important;
 }
 
 /*Buttons*/
@@ -57,15 +65,18 @@ export default {
 }
 
 /*Inputs*/
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: rgba(255, 255, 255, .5) !important;
+}
+
 input[type=checkbox] {
     position: absolute;
     opacity: 0;
-    width: 20px;
-    height: 20px;
-    z-index: 100;
+    left: -9999px;
 }
 input[type=checkbox] + .checkbox {
-    position: absolute;
+    position: relative;
+    padding-left: 30px;
 }
 input[type=checkbox] + .checkbox::before {
     position: absolute;
@@ -75,7 +86,7 @@ input[type=checkbox] + .checkbox::before {
     background: #fff;
     border: 1px solid #1984ff;
     left: 0;
-    top: 2px;
+    top: 9px;
 }
 
 input[type=checkbox] + .checkbox::after {
@@ -83,7 +94,7 @@ input[type=checkbox] + .checkbox::after {
     content: '✓';
     color: #1984ff;
     left: 5px;
-    top: -12px;
+    top: -5px;
     font-weight: 600;
     font-size: 25px;
     transform: scale(0);
@@ -108,5 +119,14 @@ input[type=radio] + label{
     background: #f1f1f1;
     margin-right: 10px;
     cursor: pointer;
+}
+.pull-right {
+    float: right;
+}
+
+.form-control {
+    color: #fff !important;
+    background-color: #33415a !important;
+    border-color: #4e6080 !important;
 }
 </style>

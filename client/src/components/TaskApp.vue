@@ -3,30 +3,30 @@
     
     <Header v-on:changeMode="changeMode" />
     <Cards v-bind:cards="cards" v-on:getCardData="getCardData"/>
-    <ModalCard v-on:changeMode="changeMode" v-bind:mode="mode" v-bind:card="currentCard"/>
+    
     <ModalBadges/>
   </div>
 </template>
 
 <script>
 import Service from "../service";
-import Cards from "./Cards";
-import ModalCard from "./ModalCard";
+import CardsList from "./CardsList";
+//import ModalCard from "./ModalCard";
 import ModalBadges from "./ModalBadges";
 import Header from './Header.vue'
 
 export default {
   name: "TaskApp",
   components: {
-    Cards,
-    ModalCard,
+    CardsList,
+    //ModalCard,
     ModalBadges,
     Header
   },
   methods: {
-    changeMode: function(mode) {
-      this.mode = mode
-    },
+    // changeMode: function(mode) {
+    //   this.mode = mode
+    // },
     getCardData: function(d) {
       this.mode = 'edit'
       this.currentCard = d

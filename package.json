@@ -16,6 +16,7 @@
     "editable-content": "^3.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "mongeese": "0.0.1",
     "mongodb": "^3.1.12",
     "sortablejs": "^1.8.1",
     "sweetalert2": "^8.0.1"
