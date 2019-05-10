@@ -58,7 +58,7 @@ router.route('/delete/:id').delete((req, res) => {
         if(!card) res.status(404).json({'status': 'error', 'text': 'Data not found'})
         else {
             card.remove()
-                .then(card => res.json({'status': 'succes', 'text': 'Card deletet successfully'}))
+                .then(card => res.json({'status': 'success', 'text': 'Card deletet successfully'}))
                 .catch(err => res.json({'status': 'error', 'text': 'Delete failed'}))
         }
     })

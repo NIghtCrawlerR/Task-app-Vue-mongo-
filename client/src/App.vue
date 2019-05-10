@@ -2,24 +2,40 @@
   <div id="app">
     <!-- <TaskApp/> -->
     <Header></Header>
-    <router-view></router-view>
+    <router-view v-on:showMessage="showMessage"></router-view>
+    <Message v-if="message.isShow" v-bind:message="message"></Message>
   </div>
 </template>
 
 <script>
 // import TaskApp from './components/TaskApp.vue'
 import Header from './components/Header'
+import Message from './components/Message.component'
 
 export default {
   name: 'app',
   components: {
-   // TaskApp,
-    Header
+    Header,
+    Message
+  },
+  methods: {
+      showMessage: function (data) {
+          this.message.status = data.status
+          this.message.text = data.text
+          this.message.isShow = true
+          setTimeout(() => {
+              this.message.isShow = false
+          }, 3000)
+      }
   },
   data(){
       return {
-          rootMode: 'rootMode'
+          rootMode: 'rootMode',
+          message: {'isShow': false, 'status': '', 'text': ''}
       }
+  },
+  created: function () {
+      this.$root.$on('showMessage', this.showMessage);
   }
 }
 </script>
@@ -37,6 +53,12 @@ export default {
 
 body {
     background-color: #141b29 !important;
+}
+
+.clearfix {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 /*Buttons*/
