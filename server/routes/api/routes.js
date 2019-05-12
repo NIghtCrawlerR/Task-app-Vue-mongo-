@@ -3,9 +3,7 @@ const express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
     Card = require('../../card.model')
-
-
-// module.exports = router;
+    Label = require('../../label.model')
 
 var dbUrl = 'mongodb://NightCrawler:F9V6U0XxMmOZEVeA@ds141284.mlab.com:41284/task-app'
 
@@ -16,12 +14,11 @@ connection.once('open', function () {
     console.log('MongoDB successfully connected')
 })
 
-
 router.route('/').get((req, res) => {
-    Card.find({}, {'title': 1, 'descr': 1}, (err, cards) => {
+    Card.find({}, {'title': 1, 'descr': 1, 'order': 1}, (err, cards) => {
         if (err) console.log
         else res.json(cards)
-    })
+    }).sort({'order': 1})
 })
 
 router.route('/:id').get((req, res) => {
@@ -31,11 +28,29 @@ router.route('/:id').get((req, res) => {
     })
 })
 
+router.route('/labels/get').get((req, res) => {
+    console.log('get')
+    Label.find({}, (err, label) => {
+        console.log(label)
+        res.json(label)
+    })
+})
+
 router.route('/add').post((req, res) => {
     let card = new Card(req.body)
+    
     card.save()
         .then(response => res.status(200).json({'status': 'success', 'text': 'New card successfully added'}))
         .catch(err => res.status(400).json({'status' : 'error', 'text': 'Adding new card failed'}))
+})
+
+
+router.route('/labels/add').post((req, res) => {
+    let label = new Label(req.body)
+    
+    label.save()
+        .then(response => res.status(200).json({'status': 'success', 'text': 'New label successfully added'}))
+        .catch(err => res.status(400).json({'status' : 'error', 'text': 'Adding new label failed'}))
 })
 
 router.route('/update/:id').post((req, res) => {
@@ -44,12 +59,25 @@ router.route('/update/:id').post((req, res) => {
         else {
             card.title = req.body.title
             card.descr = req.body.descr
+            card.order = req.body.order
             card.taskGroups = req.body.taskGroups
-
             card.save()
-                .then(card => res.json({'status': 'success', 'text': 'Card updated successfully'}))
+                .then(card => {
+                    console.log(card)
+                    res.json({'status': 'success', 'text': 'Card updated successfully'})
+                })
                 .catch(err => res.status(400).json({'status': 'error', 'text': 'Update failed'}))
         }
+    })
+})
+
+router.route('/updateOrder').post((req, res) => {
+    req.body.ids.map((id, i) => {
+        Card.findById(id, (err, card) => {
+            if(!card) res.status(404).json({'status': 'error', 'text': 'Data not found'})
+            card.set('order', i);
+            card.save();
+        })
     })
 })
 
@@ -58,40 +86,22 @@ router.route('/delete/:id').delete((req, res) => {
         if(!card) res.status(404).json({'status': 'error', 'text': 'Data not found'})
         else {
             card.remove()
-                .then(card => res.json({'status': 'success', 'text': 'Card deletet successfully'}))
+                .then(card => res.json({'status': 'success', 'text': 'Card deleted successfully'}))
                 .catch(err => res.json({'status': 'error', 'text': 'Delete failed'}))
         }
     })
 })
-// router.get('/', async (req, res) => {
-//     const cards = await loadCardsCollection();
-//     res.send(await cards.find({}).toArray());
-// });
-// router.get('/:id', async (req, res) => {
-//     const cards = await loadCardsCollection();
-//     res.send(await cards.findOne({ _id: new mongodb.ObjectID(req.params.id) }))
-// })
 
-// Add Post
-// router.post('/add', async (req, res) => {
-//     const cards = await loadCardsCollection();
-//     console.log(req.body)
-//     await cards.insertOne(req.body)
-//         .then(m => res.status(200).json({ 'status': 'success', 'text': 'New task added successfully' }))
-//         .catch(err => res.status(400).send('Adding new task failed'))
-//     //res.status(201).send();
-// });
+router.route('/labels/delete/:id').delete((req, res) => {
+    Label.findById(req.params.id, (err, label) => {
+        if(!label) res.status(404).json({'status': 'error', 'text': 'Data not found'})
+        else {
+            label.remove()
+                .then(card => res.json({'status': 'success', 'text': 'label deleted successfully'}))
+                .catch(err => res.json({'status': 'error', 'text': 'Delete failed'}))
+        }
+    })
+})
 
-// // Delete Post
-// router.delete('/:id', async (req, res) => {
-//     const cards = await loadCardsCollection();
-//     await cards.deleteOne({ _id: new mongodb.ObjectID(req.params.id) });
-//     res.status(200).send();
-// });
-
-// async function loadCardsCollection() {
-//     const client = await mongodb.MongoClient.connect(dbUrl, { useNewUrlParser: true });
-//     return client.db('task-app').collection('cards');
-// }
 
 module.exports = router;

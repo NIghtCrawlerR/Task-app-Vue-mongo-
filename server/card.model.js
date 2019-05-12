@@ -8,9 +8,12 @@ let Card = new Schema({
     descr: {
         type: String
     },
+    order: {
+        type: Number
+    },
     taskGroups: {
         type: Array
     }
 })
 
-module.exports = mongoose.model('Card', Card)
+module.exports = mongoose.model('Card', Card, 'cards')

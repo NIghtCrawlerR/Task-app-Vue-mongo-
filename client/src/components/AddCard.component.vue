@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <Form mode="add"></Form>
-  </div>
+	<div>
+		<Form mode="add"></Form>
+	</div>
 </template>
 
 <script>
 import Form from './Card-form.component'
 
 export default {
-  name: "AddCard",
-  components: {
-    Form
-  }
+    name: "AddCard",
+    components: {
+      	Form
+    }
 };
 </script>
 

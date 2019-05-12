@@ -105,8 +105,8 @@ input[type=checkbox] + .checkbox::before {
     content: '';
     width: 20px;
     height: 20px;
-    background: #fff;
-    border: 1px solid #1984ff;
+    background: transparent;
+    border: 1px solid #FF9900;
     left: 0;
     top: 9px;
 }
@@ -114,7 +114,7 @@ input[type=checkbox] + .checkbox::before {
 input[type=checkbox] + .checkbox::after {
     position: absolute;
     content: '✓';
-    color: #1984ff;
+    color: #FF9900;
     left: 5px;
     top: -5px;
     font-weight: 600;
@@ -150,5 +150,19 @@ input[type=radio] + label{
     color: #fff !important;
     background-color: #33415a !important;
     border-color: #4e6080 !important;
+}
+.btn-outline-light {
+  border-color: #4e6080 !important;
+  color: #4e6080 !important;
+}
+.btn-link {
+    color: #00c2ff !important;
+}
+.btn-link-danger {
+    color: #ef0f36 !important;
+}
+.btn-outline-danger {
+    color: #ef0f36;
+    border-color: #ef0f36;
 }
 </style>

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import CardsList from '../components/CardsList'
 import AddCard from '../components/AddCard.component'
 import EditCard from '../components/EditCard.component'
+import LabelsForm from '../components/Labels-form.component'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router ({
             path: '/:id',
             name: 'EditCard',
             component: EditCard
+        },
+        {
+            path: '/labels/get',
+            name: 'LabelsForm',
+            component: LabelsForm
         }
     ]
 })

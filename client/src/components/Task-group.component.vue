@@ -1,21 +1,14 @@
 <template>
 	<div class="task-group mb-3">
-		<h3>
-			<input class="form-control input-editable group-title" type="text" v-model="group.name">
-		</h3>
+		<h3><input class="form-control input-editable group-title" type="text" v-model="group.name"></h3>
 		<div class="progress mb-3">
-			<div
-				class="progress-bar progress-bar-striped"
-				v-bind:style="{ width: progressWidth + '%' }"
-				role="progressbar"
-				aria-valuenow="25"
-				aria-valuemin="0"
-				aria-valuemax="100"
+			<div class="progress-bar progress-bar-striped"
+					v-bind:style="{ width: progressWidth + '%' }"
 			>{{ this.itemsCompleted + ' of ' + this.itemsCount }}</div>
 		</div>
-		<div class="task-list-body">
+		<draggable class="task-list-body" group="tasks" ghost-class="ghost-item" handle=".handle" :options="{animation:150}" @change="onSort" :list="group.tasks">
 			<div
-				v-for="task in group.tasks"
+				v-for="task in tasks"
 				v-bind:key="task.id"
 				class="task-item"
 				:class="hideCompleted && task.checked ? 'hidden':''"
@@ -23,42 +16,42 @@
 				<input type="checkbox" :id="task.id" v-on:change="setComplete" :checked="task.checked">
 				<label :for="task.id" class="checkbox"></label>
 				<input type="text" class="form-control input-editable" v-model="task.task">
+                <span class="remove" :id="task.id" v-on:click="removeTask"><i class="fas fa-times"></i></span>
+				<span class="handle"><i class="fas fa-bars"></i></span>
 			</div>
-		</div>
-		<input
-			class="form-control mt-3 mb-3"
-			type="text"
-			v-on:keypress="addTask"
-			:data-id="group.id"
-			placeholder="Add task..."
-		>
+		</draggable>
+		<input type="text" class="form-control mt-3 mb-3" v-on:keypress="addTask" placeholder="Add task...">
 
 		<span
 			v-if="itemsCompleted > 0"
 			class="btn-link b-0"
 			v-on:click="toggleCompleted"
 		>{{ hideCompleted ? 'Show completed' : 'Hide completed' }}</span>
-		<span
-			class="btn-link btn-link-danger pull-right"
-			v-on:click="$emit('removeGroup', group.id)"
-		>Remove list</span>
-
+		<span class="btn-link btn-link-danger pull-right" v-on:click="$emit('removeGroup', group.id)" ><i class="fas fa-trash-alt mr-2"></i> Remove</span>
+		
 		<div class="clearfix"></div>
 	</div>
 </template>
 
 <script>
 import uuid from "uuid";
+import draggable from 'vuedraggable'
 
 export default {
 	name: "TaskGroup",
+	display: "Handle",
 	props: ["group"],
+	components: {
+		draggable 
+	},
 	data() {
 		return {
 			itemsCount: 0,
 			itemsCompleted: 0,
 			progressWidth: 0,
-			hideCompleted: true
+			hideCompleted: true,
+			dragging: false,
+			tasks: this.group.tasks.sort((a, b) => a.order - b.order)
 		};
 	},
 	methods: {
@@ -73,7 +66,14 @@ export default {
 				this.countCompleted();
 				this.$emit("setChange", grp);
 			}
-		},
+        },
+        removeTask: function (e) {
+            let thatId = e.target.id,
+                tasks = this.group.tasks
+            tasks.splice(tasks.indexOf(tasks.find(el => el.id == thatId)), 1)
+            this.countCompleted();
+            this.$emit("setChange", this.group);
+        },
 		setComplete: function(e) {
 			let thatId = e.target.id;
 			this.group.tasks.map(task => {
@@ -82,18 +82,21 @@ export default {
 			});
 			this.countCompleted();
 			this.$emit("setChange", this.group);
-			//console.log(this.group)
 		},
 		toggleCompleted: function() {
 			this.hideCompleted = !this.hideCompleted;
 		},
 		countCompleted: function() {
 			this.itemsCount = this.group.tasks.length;
-			this.itemsCompleted = this.group.tasks.filter(
-				item => item.checked
-			).length;
-			this.progressWidth =
-				(100 / this.itemsCount) * this.itemsCompleted || 0;
+			this.itemsCompleted = this.group.tasks.filter(item => item.checked).length;
+			this.progressWidth = (100 / this.itemsCount) * this.itemsCompleted || 0;
+		},
+		onSort: function () {
+			this.group.tasks.map((task, i) => {
+				task['order'] = i
+			})
+			this.countCompleted();
+			this.$emit("setChange", this.group);
 		}
 	},
 	created: function() {
@@ -103,6 +106,9 @@ export default {
 </script>
 
 <style scoped>
+.task-list-body {
+	position: relative;
+}
 .task-group {
 	padding: 20px;
 	background: #243046;
@@ -122,6 +128,9 @@ export default {
 	text-transform: uppercase;
 	font-weight: bold;
 }
+.progress {
+	background-color: #33415a;
+}
 .btn-link {
 	cursor: pointer;
 }
@@ -131,4 +140,27 @@ export default {
 .hidden {
 	display: none;
 }
+.remove {
+    color: rgba(255, 255, 255, .3);
+    cursor: pointer;
+    padding: 7px 0 7px 20px;
+    transition: all .3s;
+}
+.remove:hover {
+    color: rgba(255, 255, 255, 1);
+}
+.remove i {
+    pointer-events: none;
+}
+.handle {
+	cursor: move;
+	padding: 7px 0 7px 20px;
+	color: #fff;
+}
+.ghost-item {
+	background-color: #33415a;
+    padding: 0 10px;
+    opacity: .5;
+}
+
 </style>

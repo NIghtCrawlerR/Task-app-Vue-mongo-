@@ -29,14 +29,24 @@ export default {
         right: 20px;
         padding: 20px;
     }
+    .message h3 {
+        text-transform: uppercase;
+        font-size: 18px;
+        letter-spacing: 1px;
+    }
+    .message p {
+        font-size: 14px;
+    }
     .message.success {
         background-color: rgb(79, 195, 136, .6);
         border-color: #48d88f;
     }
     .message.warning {
-
+        background-color: rgba(195, 154, 79, 0.6);
+        border-color: #d89e48;
     }
     .message.error {
-
+        background-color: rgba(195, 79, 89, 0.6);
+        border-color: #d8484f;
     }
 </style>
