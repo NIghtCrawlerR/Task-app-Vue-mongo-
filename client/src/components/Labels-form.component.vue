@@ -3,6 +3,7 @@
         <router-link to="/" class="btn btn-outline-light mb-4">
 			<i class="fas fa-arrow-left"></i> Back
 		</router-link>
+        <h3 class="pull-right">Add labels</h3>
         <form class="label-form" v-on:submit="onSubmit">
              <label v-if="labels.length > 0">Labels:</label>
             <div class="form-group">
@@ -25,7 +26,6 @@
                         <label :for="color" :style="'background-color:'+color"></label>
                     </div>
                 </div>
-                
             </div>
             <b-button variant="info" type="submit">Create label</b-button>
         </form>
@@ -87,9 +87,11 @@ export default {
 </script>
 
 <style scoped>
+    h3 {
+        font-size: 20px;
+    }
     .label-form {
         background-color: #243046;
-        /* background-color: #951be7; */
         border: 1px solid #3e4c67;
         color: #fff;
         padding: 30px;

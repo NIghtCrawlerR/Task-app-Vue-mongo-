@@ -13,6 +13,9 @@ let Card = new Schema({
     },
     taskGroups: {
         type: Array
+    },
+    labels: {
+        type: Array
     }
 })
 

@@ -15,7 +15,7 @@ connection.once('open', function () {
 })
 
 router.route('/').get((req, res) => {
-    Card.find({}, {'title': 1, 'descr': 1, 'order': 1}, (err, cards) => {
+    Card.find({}, {'title': 1, 'descr': 1, 'order': 1, 'labels': 1}, (err, cards) => {
         if (err) console.log
         else res.json(cards)
     }).sort({'order': 1})
@@ -60,6 +60,7 @@ router.route('/update/:id').post((req, res) => {
             card.title = req.body.title
             card.descr = req.body.descr
             card.order = req.body.order
+            card.labels = req.body.labels
             card.taskGroups = req.body.taskGroups
             card.save()
                 .then(card => {

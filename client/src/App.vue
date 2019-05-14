@@ -61,6 +61,14 @@ body {
     clear: both;
 }
 
+h3 {
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
 /*Buttons*/
 .btn-success {
     background: #00bbce;

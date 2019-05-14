@@ -4,6 +4,7 @@
       <div class="card-body">
         <h5 class="card-title">{{ card.title }}</h5>
         <p class="card-descr">{{ card.descr }}</p>
+        <span class="badge" v-for="label in card.labels" v-bind:key="label._id" :style="'background-color:'+label.value">{{ label.label }}</span>
       </div>
     </router-link>
 

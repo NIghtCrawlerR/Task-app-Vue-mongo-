@@ -1,21 +1,17 @@
 <template>
 	<div class="task-group mb-3">
-		<h3><input class="form-control input-editable group-title" type="text" v-model="group.name"></h3>
+        <span class="handle pull-right"><i class="fas fa-bars"></i></span>
+		<h3><input class="form-control input-editable group-title" v-on:keydown="$emit('isTyping')" type="text" v-model="group.name"></h3>
 		<div class="progress mb-3">
 			<div class="progress-bar progress-bar-striped"
 					v-bind:style="{ width: progressWidth + '%' }"
 			>{{ this.itemsCompleted + ' of ' + this.itemsCount }}</div>
 		</div>
 		<draggable class="task-list-body" group="tasks" ghost-class="ghost-item" handle=".handle" :options="{animation:150}" @change="onSort" :list="group.tasks">
-			<div
-				v-for="task in tasks"
-				v-bind:key="task.id"
-				class="task-item"
-				:class="hideCompleted && task.checked ? 'hidden':''"
-			>
+			<div v-for="task in tasks" v-bind:key="task.id" class="task-item" :class="hideCompleted && task.checked ? 'hidden':''" >
 				<input type="checkbox" :id="task.id" v-on:change="setComplete" :checked="task.checked">
 				<label :for="task.id" class="checkbox"></label>
-				<input type="text" class="form-control input-editable" v-model="task.task">
+				<input type="text" class="form-control input-editable" v-model="task.task" v-on:keydown="$emit('isTyping')">
                 <span class="remove" :id="task.id" v-on:click="removeTask"><i class="fas fa-times"></i></span>
 				<span class="handle"><i class="fas fa-bars"></i></span>
 			</div>
@@ -127,6 +123,7 @@ export default {
 .group-title {
 	text-transform: uppercase;
 	font-weight: bold;
+    width: 90%;
 }
 .progress {
 	background-color: #33415a;
