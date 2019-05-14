@@ -173,4 +173,26 @@ input[type=radio] + label{
     color: #ef0f36;
     border-color: #ef0f36;
 }
+
+.multiselect {
+	height: auto !important;
+	min-height: 0 !important;
+    padding: 0 !important;
+}
+
+.multiselect__tags, .multiselect__input {
+	background: transparent !important;
+	border: 0 !important;
+}
+.multiselect__tags {
+    height: auto !important;
+    min-height: 0 !important;
+}
+.multiselect__tag-icon:after {
+    color: rgba(255, 255, 255, 1) !important;
+}
+.multiselect__tag-icon:focus, .multiselect__tag-icon:hover {
+    background: inherit !important;
+}
+
 </style>

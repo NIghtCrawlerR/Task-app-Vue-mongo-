@@ -55,6 +55,7 @@ router.route('/labels/add').post((req, res) => {
 
 router.route('/update/:id').post((req, res) => {
     Card.findById(req.params.id, (err, card) => {
+        console.log(card)
         if(!card) res.status(404).json({'status': 'error', 'text': 'Data not found'})
         else {
             card.title = req.body.title

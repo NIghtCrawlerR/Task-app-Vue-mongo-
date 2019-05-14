@@ -9,19 +9,19 @@
 		</b-button>
         <h3 v-else class="pull-right card-title">Add new card</h3>
 		<form class="card_inner" v-on:submit="onSubmit">
-        
-            <multiselect v-model="selectedLabels" :multiple="true" :options="labels" label="label" track-by="label" @input="onSelect">
-                <template slot="option" slot-scope="props" v-on:click="onSelect"> <span class="badge" :style="'background-color:'+props.option.value">{{props.option.label}}</span> </template>
-            </multiselect>
-
-			<div class="form-group">
+   			<div class="form-group mb-4">
 				<label v-if="mode == 'add'" for="title">Title</label>
 				<input type="text" v-model="title" class="form-control" v-on:keydown="isTyping" :class="mode == 'edit' ? 'input-editable card-title' : ''" placeholder="Title" required>
 			</div>
 
-			<div class="form-group">
+            <multiselect class="form-control mb-3" v-model="selectedLabels" :multiple="true" :options="labels" label="title" track-by="title" @input="onSelect" :placeholder="'Select labels'">
+				<template slot="tag" slot-scope="{option, remove}"><span class="multiselect__tag" :style="'background-color:'+option.color">{{option.title}}<i @click="remove(option)" aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></template>
+                <template slot="option" slot-scope="props" v-on:click="onSelect"> <span class="badge" :style="'background-color:'+props.option.color">{{props.option.title}}</span> </template>
+            </multiselect>
+
+			<div class="form-group mb-5">
 				<label v-if="mode == 'add'" for="descr">Description</label>
-				<textarea-autosize class="form-control" v-model="descr" v-on:keydown="isTyping" :class="mode == 'edit' ? 'input-editable' : ''" placeholder="Description" ></textarea-autosize>
+				<textarea-autosize class="form-control" v-model="descr" v-on:keydown="isTyping" :class="mode == 'edit' && descr ? 'input-editable' : ''" placeholder="Description" ></textarea-autosize>
 			</div>
 		
             <draggable ghost-class="ghost" @update="onSort" :list="taskGroups">
@@ -67,7 +67,7 @@ export default {
         taskGroups: [],
         selectedLabels: [],
         labels: [],
-        timeout: null
+		timeout: null
     };
   },
   methods: {
@@ -83,13 +83,13 @@ export default {
 		this.taskGroups.map((grp, i) => {
 			if (grp.id == id) this.taskGroups.splice(i, 1);
 		});
-		this.onSubmit()
-    },
+		if(this.mode == 'edit') this.onSubmit()
+	},
     setChange: function (e) {
 		this.taskGroups.find(grp => {
 			return grp.id == e.id;
 		}).tasks = e.tasks;
-		this.onSubmit()
+		if(this.mode == 'edit') this.onSubmit()
     },
     deleteCard: function () {
 		let isDel = window.confirm("Are you sure?");
@@ -138,26 +138,22 @@ export default {
         this.taskGroups.map((grp, i) => {
             grp['order'] = i
         })
-        this.onSubmit();
+        if(this.mode == 'edit') this.onSubmit();
     },
     isTyping: function () {
         if(this.mode == 'add') return !1
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
-            this.onSubmit();
+            if(this.mode == 'edit') this.onSubmit();
         }, 2000);
-    },
-     onSelect (label) {
-    //   const tag = {
-    //     label: lebel,
-    //     value: lebel.substring(0, 2) + Math.floor((Math.random() * 10000000))
-    //   }
-    //   this.labels.push(tag)
-    //   this.selected.push(tag)
-      console.log(this.selectedLabels)
-    }
+	},
+	onSelect: function () {
+		if(this.mode == 'edit') this.onSubmit()
+	}
   },
   created: function () {
+	if(this.mode == 'add') axios.get("http://localhost:5000/api/routes/").then(res => this.order = res.data.length + 1)
+	  
     axios.get("http://localhost:5000/api/routes/labels/get")
             .then(response => {
                 this.labels = response.data
@@ -217,6 +213,8 @@ textarea {
 .ghost {
     opacity: .5;
 }
+
+
 
 </style>
 
