@@ -65,7 +65,6 @@ export default {
                 title: this.title,
                 color: this.lColor
             }
-            console.log(newLabel)
             axios.post("http://localhost:5000/api/routes/labels/add", newLabel)
             .then(response => {
                 this.labels.push(newLabel)
@@ -79,7 +78,6 @@ export default {
         axios.get("http://localhost:5000/api/routes/labels/get")
             .then(response => {
                 this.labels = response.data
-                console.log(this.labels)
             })
             
     }

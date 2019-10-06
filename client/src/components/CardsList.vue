@@ -44,7 +44,6 @@ export default {
 		axios.get('http://localhost:5000/api/routes/')
 		.then(response => { 
             this.cards = response.data 
-            console.log(this.cards)
             })
 		.catch(err => console.log(err))
 	}
