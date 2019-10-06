@@ -15,10 +15,8 @@
   },
   "author": "Angelina",
   "license": "ISC",
-  "engines": {
-    "node": "10.x"
-  },
   "dependencies": {
+    "@vue/cli-service": "^3.11.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "editable-content": "^3.2.0",
