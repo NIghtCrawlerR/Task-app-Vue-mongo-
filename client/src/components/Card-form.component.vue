@@ -125,10 +125,12 @@ export default {
     },
     removeGroup: function (id) {
       let isDel = window.confirm("Delete this group?");
-      this.taskGroups.map((grp, i) => {
-        if (grp.id == id) this.taskGroups.splice(i, 1);
-      });
-      if (this.mode == 'edit') this.onSubmit()
+      if (isDel) {
+        this.taskGroups.map((grp, i) => {
+          if (grp.id == id) this.taskGroups.splice(i, 1);
+        });
+        if (this.mode == 'edit') this.onSubmit()
+      }
     },
     setChange: function (e) {
       this.taskGroups.find(grp => {
@@ -169,7 +171,6 @@ export default {
             this.selectedLabels = [];
             this.$root.$emit("showMessage", response.data);
           })
-          .catch(err => console.log(err));
       } else {
         axios.post("http://localhost:5000/api/routes/update/" + this.$route.params.id, newCard)
           .then(response => {
@@ -212,7 +213,6 @@ export default {
             (this.selectedLabels = response.data.labels),
             (this.taskGroups = response.data.taskGroups.sort((a, b) => a.order - b.order));
         })
-        .catch(err => console.log(err));
     }
   }
 };
