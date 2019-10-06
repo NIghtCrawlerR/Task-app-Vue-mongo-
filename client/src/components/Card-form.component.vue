@@ -96,6 +96,8 @@ import TaskGroup from "./Task-group.component";
 import draggable from 'vuedraggable';
 import Multiselect from 'vue-multiselect'
 
+const apiEndpoint = 'https://mevn-dashboard.herokuapp.com/'
+
 export default {
   name: "Form",
   props: ["mode"],
@@ -143,7 +145,7 @@ export default {
       if (isDel)
         axios
           .delete(
-            "http://localhost:5000/api/routes/delete/" + this.$route.params.id
+            apiEndpoint + "/api/routes/delete/" + this.$route.params.id
           )
           .then(response => {
             this.$router.push("/");
@@ -163,7 +165,7 @@ export default {
 
       if (this.mode === "add") {
         axios
-          .post("http://localhost:5000/api/routes/add", newCard)
+          .post(apiEndpoint + "/api/routes/add", newCard)
           .then(response => {
             this.title = "";
             this.descr = "";
@@ -172,7 +174,7 @@ export default {
             this.$root.$emit("showMessage", response.data);
           })
       } else {
-        axios.post("http://localhost:5000/api/routes/update/" + this.$route.params.id, newCard)
+        axios.post(apiEndpoint + "/api/routes/update/" + this.$route.params.id, newCard)
           .then(response => {
             this.$root.$emit("showMessage", response.data);
           });
@@ -196,16 +198,16 @@ export default {
     }
   },
   created: function () {
-    if (this.mode == 'add') axios.get("http://localhost:5000/api/routes/").then(res => this.order = res.data.length + 1)
+    if (this.mode == 'add') axios.get(apiEndpoint + "/api/routes/").then(res => this.order = res.data.length + 1)
 
-    axios.get("http://localhost:5000/api/routes/labels/get")
+    axios.get(apiEndpoint + "/api/routes/labels/get")
       .then(response => {
         this.labels = response.data
       })
 
     if (this.mode === "edit") {
       axios
-        .get("http://localhost:5000/api/routes/" + this.$route.params.id)
+        .get(apiEndpoint + "/api/routes/" + this.$route.params.id)
         .then(response => {
           (this.title = response.data.title),
             (this.descr = response.data.descr),

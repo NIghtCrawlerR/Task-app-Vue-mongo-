@@ -35,6 +35,8 @@
 <script>
 import axios from 'axios'
 
+const apiEndpoint = 'https://mevn-dashboard.herokuapp.com/'
+
 export default {
     name: 'LabelsForm',
     data () {
@@ -51,7 +53,7 @@ export default {
             let thatId = e.target.id,
                 labels = this.labels
 
-            if (isDel) axios.delete("http://localhost:5000/api/routes/labels/delete/"+ thatId)
+            if (isDel) axios.delete(apiEndpoint + "/api/routes/labels/delete/"+ thatId)
             .then(response => {
                 labels.splice(labels.indexOf(labels.find(el => el._id == thatId)), 1)
                 this.$root.$emit("showMessage", response.data);
@@ -65,7 +67,7 @@ export default {
                 title: this.title,
                 color: this.lColor
             }
-            axios.post("http://localhost:5000/api/routes/labels/add", newLabel)
+            axios.post(apiEndpoint + "/api/routes/labels/add", newLabel)
             .then(response => {
                 this.labels.push(newLabel)
                 this.title = '',
@@ -75,7 +77,7 @@ export default {
         }
     },
     created: function () {
-        axios.get("http://localhost:5000/api/routes/labels/get")
+        axios.get(apiEndpoint + "/api/routes/labels/get")
             .then(response => {
                 this.labels = response.data
             })

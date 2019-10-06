@@ -14,6 +14,8 @@ import Card from "./Card";
 import axios from 'axios'
 import draggable from 'vuedraggable'
 
+const apiEndpoint = 'https://mevn-dashboard.herokuapp.com'
+
 export default {
   name: "CardsList",
   display: 'Simple',
@@ -37,11 +39,11 @@ export default {
         orders.push(i)
       })
 
-      axios.post('http://localhost:5000/api/routes/updateOrder/', { ids, orders })
+      axios.post(apiEndpoint + '/api/routes/updateOrder/', { ids, orders })
     }
   },
   async created() {
-    axios.get('http://localhost:5000/api/routes/')
+    axios.get(apiEndpoint + '/api/routes/')
       .then(response => {
         this.cards = response.data
       })
