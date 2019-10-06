@@ -27,7 +27,8 @@
     "mongeese": "0.0.1",
     "mongodb": "^3.1.12",
     "sortablejs": "^1.8.1",
-    "sweetalert2": "^8.0.1"
+    "sweetalert2": "^8.0.1",
+    "vue-template-compiler": "^2.6.10"
   },
   "devDependencies": {
     "nodemon": "^1.18.9"
