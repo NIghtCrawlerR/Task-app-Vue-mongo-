@@ -35,7 +35,7 @@
 <script>
 import axios from 'axios'
 
-const apiEndpoint = 'https://mevn-dashboard.herokuapp.com/'
+const apiEndpoint = 'https://mevn-dashboard.herokuapp.com'
 
 export default {
     name: 'LabelsForm',

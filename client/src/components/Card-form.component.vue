@@ -96,7 +96,7 @@ import TaskGroup from "./Task-group.component";
 import draggable from 'vuedraggable';
 import Multiselect from 'vue-multiselect'
 
-const apiEndpoint = 'https://mevn-dashboard.herokuapp.com/'
+const apiEndpoint = 'https://mevn-dashboard.herokuapp.com'
 
 export default {
   name: "Form",
