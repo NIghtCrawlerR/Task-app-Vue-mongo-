@@ -6,6 +6,7 @@ if (!isProduction) {
 const express = require('express'),
     app = express(),
     path = require('path'),
+    serveStatic = require("serve-static"),
     http = require('http').Server(app),
     mongodb = require('mongodb'),
     cors = require('cors'),
@@ -31,8 +32,8 @@ connection.once('open', function () {
 const routes = require('./routes/api/routes')
 app.use('/api/routes', routes);
 
-app.use(express.static(path.join(__dirname, "client/dist")))
-
+// app.use(express.static(path.join(__dirname, "client/dist")))
+app.use(serveStatic(path.join(__dirname, 'client/dist')));
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "/client/dist/index.html"));
