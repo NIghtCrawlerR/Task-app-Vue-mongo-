@@ -95,8 +95,10 @@ import uuid from "uuid";
 import TaskGroup from "./Task-group.component";
 import draggable from 'vuedraggable';
 import Multiselect from 'vue-multiselect'
+import { mapGetters } from 'vuex'
 
-const apiEndpoint = 'https://mevn-dashboard.herokuapp.com'
+// const apiEndpoint = 'https://mevn-dashboard.herokuapp.com'
+const apiEndpoint = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : 'https://mevn-dashboard.herokuapp.com'
 
 export default {
   name: "Form",
@@ -116,6 +118,9 @@ export default {
       labels: [],
       timeout: null
     };
+  },
+  computed: {
+    ...mapGetters(['user'])
   },
   methods: {
     addGroup: function () {
@@ -165,7 +170,7 @@ export default {
 
       if (this.mode === "add") {
         axios
-          .post(apiEndpoint + "/api/routes/add", newCard)
+          .post(apiEndpoint + "/api/routes/add", {cardData: newCard, userId: this.user._id})
           .then(response => {
             this.title = "";
             this.descr = "";
@@ -198,6 +203,7 @@ export default {
     }
   },
   created: function () {
+    console.log(this.user)
     if (this.mode == 'add') axios.get(apiEndpoint + "/api/routes/").then(res => this.order = res.data.length + 1)
 
     axios.get(apiEndpoint + "/api/routes/labels/get")

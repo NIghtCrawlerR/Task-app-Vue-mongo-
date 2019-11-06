@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="'/'+card._id" class="card m-2">
+  <router-link :to="'/card/'+card._id" class="card m-2">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}</h5>
       <p class="card-descr">{{ card.descr }}</p>

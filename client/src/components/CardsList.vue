@@ -2,7 +2,7 @@
   <div class="d-flex flex-wrap m-2 mr-5">
     <draggable class="d-flex flex-wrap" draggable=".card" @update="onSort" :list="cards">
       <Card class="card" v-for="card in cards" v-bind:key="card._id" v-bind:card="card" />
-      <router-link to="/add" class="add-card-button m-2">
+      <router-link to="/dashboard/add" class="add-card-button m-2">
         <i class="fas fa-plus mr-2"></i> Add card
       </router-link>
     </draggable>
@@ -13,8 +13,9 @@
 import Card from "./Card";
 import axios from 'axios'
 import draggable from 'vuedraggable'
+import { mapGetters, mapActions } from 'vuex'
 
-const apiEndpoint = 'https://mevn-dashboard.herokuapp.com'
+const apiEndpoint = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : 'https://mevn-dashboard.herokuapp.com'
 
 export default {
   name: "CardsList",
@@ -31,6 +32,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getUser']),
     onSort: function () {
       let ids = []
       let orders = []
@@ -43,10 +45,14 @@ export default {
     }
   },
   async created() {
-    axios.get(apiEndpoint + '/api/routes/')
-      .then(response => {
-        this.cards = response.data
+    this.getUser()
+      .then(res => {
+        axios.get(apiEndpoint + '/api/routes/', { params: {cards: res.data.user.cards} })
+          .then(response => {
+            this.cards = response.data
+          })
       })
+
   }
 };
 </script>

@@ -9,13 +9,22 @@
     <router-link to="/labels/get" class="header-button" v-b-tooltip.hover.left title="Add labels">
       <i class="fas fa-tags"></i>
     </router-link>
+    <a to="/logout" class="header-button" @click.prevent="logoutUser">
+      <i class="fas fa-sign-out-alt"></i>
+    </a>
   </nav>
 </template>
 
 <script>
-
+import { mapActions } from 'vuex'
 export default {
-  name: 'Header'
+  name: 'Header',
+  methods: {
+    ...mapActions(['logout']),
+    logoutUser() {
+      this.logout()
+    }
+  }
 }
 </script>
 

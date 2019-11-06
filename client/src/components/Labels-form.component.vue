@@ -35,7 +35,7 @@
 <script>
 import axios from 'axios'
 
-const apiEndpoint = 'https://mevn-dashboard.herokuapp.com'
+const apiEndpoint = process.env.NODE_ENV === "development" ? 'http://localhost:5000' : 'https://mevn-dashboard.herokuapp.com'
 
 export default {
     name: 'LabelsForm',
